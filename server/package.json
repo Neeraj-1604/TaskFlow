@@ -18,9 +18,11 @@
   "author": "Neeraj",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "pg": "^8.13.3"
+    "pg": "^8.13.3",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
