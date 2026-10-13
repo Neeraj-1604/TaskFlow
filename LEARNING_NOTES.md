@@ -22,13 +22,3 @@
 | 12 | Docker | ⬜ Upcoming |
 | 13 | CI/CD & deployment | ⬜ Upcoming |
 | 14 | React client, review | ⬜ Upcoming |
-
----
-
-## Day 1 — Foundations
-
-> Status: NOT DONE. The folder structure was scaffolded but no code was written. Must be completed before Day 2 coding begins.
-
-## Day 2 — PostgreSQL & Schema Design
-
-> Status: IN PROGRESS. Starting with concepts.

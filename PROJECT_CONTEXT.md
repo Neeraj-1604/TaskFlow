@@ -7,7 +7,7 @@
 ## Who I Am
 
 - **Name:** Neeraj
-- **Background:** 2nd-year Integrated M.Tech IT student
+- **Background:** 3rd-year Integrated M.Tech IT student
 - **Primary Goal:** Deeply LEARN backend engineering — not just get working code. I want to be able to explain every decision in interviews.
 
 ## What We Are Building
@@ -83,7 +83,3 @@ Each feature folder (auth, projects, tasks, comments, members, attachments) cont
 - Suggest a Git commit message after every meaningful step.
 - Never move to the next phase without my confirmation.
 
-## Current Progress
-
-- **Day 1:** NOT DONE — folder structure exists, all files are empty (0 bytes). No npm init, no dependencies, no code.
-- **Day 2:** In progress (concepts phase).
