@@ -19,7 +19,7 @@ const registerSchema = z.object({
         .regex(/[a-z]/, { message: 'Password must contain at least one lowercase letter' })
         .regex(/[0-9]/, { message: 'Password must contain at least one number' })
         .regex(/[^A-Za-z0-9]/, { message: 'Password must contain at least one special character' }),
-});
+}).strict();
 module.exports = {
     registerSchema,
 };
