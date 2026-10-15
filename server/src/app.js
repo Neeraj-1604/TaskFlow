@@ -2,6 +2,7 @@ const express = require('express');
 const db = require('./config/db.js');
 const errorHandler = require('./middleware/errorHandler.js');
 const AppError = require('./errors/AppError.js');
+const authRouter = require('./features/auth/auth.routes.js');
 const app = express()
 app.use(express.json());
 app.get('/health', async (req, res) => {
@@ -19,6 +20,7 @@ app.get('/health', async (req, res) => {
     });
   }
 });
+app.use('/api/v1/auth', authRouter);
 app.all('*', (req, res, next) => {
   next(new AppError('Cannot find the requested URL', 404));
 });
