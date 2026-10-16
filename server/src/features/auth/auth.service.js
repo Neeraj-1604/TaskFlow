@@ -1,6 +1,6 @@
-const { findUserByEmail, createUser } = require('./auth.repository.js');
+const { findUserByEmail, createUser, findUserById } = require('./auth.repository.js');
 const { hashPassword, comparePassword } = require('../../utils/hash.js');
-const { generateAccessToken, generateRefreshToken } = require("../../utils/jwt.js")
+const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require("../../utils/jwt.js")
 const AppError = require('../../errors/AppError.js');
 const AuthenticationError = require('../../errors/AuthenticationError.js');
 const registerUser = async ({ name, email, password }) => {
@@ -38,7 +38,27 @@ const loginUser = async ({ email, password }) => {
         }
     };
 };
+const refreshAccessToken = async (refreshToken) => {
+    if (!refreshToken) {
+        throw new AuthenticationError('Refresh token not found');
+    }
+    let decoded;
+    try {
+        decoded = verifyRefreshToken(refreshToken);
+    }
+    catch (err) {
+        throw new AuthenticationError('Invalid or expired refresh token');
+    }
+    const user = await findUserById(decoded.id);
+    if (!user) {
+        throw new AuthenticationError('User belonging to this token no lpnger exists');
+    }
+    const newAccessToken = generateAccessToken({ id: user.id, email: user.email });
+    return { accessToken: newAccessToken };
+
+}
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    refreshAccessToken
 };

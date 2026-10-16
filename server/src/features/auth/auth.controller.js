@@ -1,6 +1,7 @@
 const asyncHandler = require('../../utils/asyncHandler.js');
 const apiResponse = require('../../utils/apiResponse.js');
-const { registerUser, loginUser } = require('./auth.service.js');
+const { registerUser, loginUser, refreshAccessToken } = require('./auth.service.js');
+const { findUserById } = require('./auth.repository.js');
 const COOKIE_OPTIONS = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -27,8 +28,19 @@ const logout = asyncHandler(async (req, res) => {
     const response = new apiResponse(200, {}, 'Logout successful');
     res.status(response.statusCode).json(response);
 });
+const getMe = asyncHandler(async (req, res) => {
+    const user = await findUserById(req.user.id);
+    const response = new apiResponse(200, user, 'Current user profile fetched successfully');
+    res.status(response.statusCode).json(response);
+});
+const refresh = asyncHandler(async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+    const { accessToken } = await refreshAccessToken(refreshToken);
+    const response = new apiResponse(200, { accessToken }, 'Access Token refreshed successfully');
+    res.status(response.statusCode).json(response);
+});
 
 module.exports = {
     register,
-    login, logout
+    login, logout, getMe, refresh
 }
