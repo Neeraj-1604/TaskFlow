@@ -20,6 +20,11 @@ const registerSchema = z.object({
         .regex(/[0-9]/, { message: 'Password must contain at least one number' })
         .regex(/[^A-Za-z0-9]/, { message: 'Password must contain at least one special character' }),
 }).strict();
+const loginSchema = z.object({
+    email: z.string({ required_error: 'Email is required' }).trim().toLowerCase().email({ message: 'Invalid email address' }),
+    password: z.string({ required_error: 'Password is required' }).min(1, { message: 'Password cannot be empty' }),
+}).strict();
 module.exports = {
     registerSchema,
+    loginSchema,
 };
