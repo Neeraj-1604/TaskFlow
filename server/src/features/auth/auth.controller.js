@@ -15,7 +15,7 @@ const register = asyncHandler(async (req, res) => {
 const login = asyncHandler(async (req, res) => {
     const { user, tokens } = await loginUser(req.body);
     res.cookie('refreshToken', tokens.refreshToken, COOKIE_OPTIONS);
-    const response = new apiResponse(200, { user, accesToken: tokens.accessToken }, 'Login succesfull');
+    const response = new apiResponse(200, { user, accessToken: tokens.accessToken }, 'Login succesfull');
     res.status(response.statusCode).json(response);
 });
 const logout = asyncHandler(async (req, res) => {
@@ -25,7 +25,7 @@ const logout = asyncHandler(async (req, res) => {
         sameSite: 'strict',
     });
     const response = new apiResponse(200, {}, 'Logout successful');
-
+    res.status(response.statusCode).json(response);
 });
 
 module.exports = {
