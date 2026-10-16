@@ -1,5 +1,6 @@
 const { findUserByEmail, createUser } = require('./auth.repository.js');
 const { hashPassword, comparePassword } = require('../../utils/hash.js');
+const { generateAccessToken, generateRefreshToken } = require("../../utils/jwt.js")
 const AppError = require('../../errors/AppError.js');
 const AuthenticationError = require('../../errors/AuthenticationError.js');
 const registerUser = async ({ name, email, password }) => {
@@ -20,7 +21,23 @@ const loginUser = async ({ email, password }) => {
     if (!isPasswordValid) {
         throw new AuthenticationError('Invalid email or password');
     }
-}
+    const tokenPayload = { id: user.id, email: user.email };
+    const accessToken = generateAccessToken(tokenPayload);
+    const refreshToken = generateRefreshToken(tokenPayload);
+
+    return {
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            createdAt: user.created_at,
+        },
+        tokens: {
+            accessToken,
+            refreshToken,
+        }
+    };
+};
 module.exports = {
     registerUser,
     loginUser
