@@ -1,10 +1,13 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const db = require('./config/db.js');
 const errorHandler = require('./middleware/errorHandler.js');
+const projectsRouter = require('./features/projects/projects.routes.js');
 const AppError = require('./errors/AppError.js');
 const authRouter = require('./features/auth/auth.routes.js');
 const app = express()
 app.use(express.json());
+app.use(cookieParser());
 app.get('/health', async (req, res) => {
   try {
     await db.query('SELECT 1');
@@ -21,6 +24,7 @@ app.get('/health', async (req, res) => {
   }
 });
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/projects', projectsRouter);
 app.all('*', (req, res, next) => {
   next(new AppError('Cannot find the requested URL', 404));
 });
