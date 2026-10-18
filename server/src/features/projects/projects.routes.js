@@ -1,4 +1,5 @@
 const express = require('express');
+const membersRouter = require('../members/members.routes.js');
 const {
     create,
     getAll,
@@ -25,4 +26,5 @@ router.patch(
     update
 );
 router.delete('/:id', validate(projectIdParamSchema, 'params'), remove);
+router.use('/:projectId/members', membersRouter);
 module.exports = router;
