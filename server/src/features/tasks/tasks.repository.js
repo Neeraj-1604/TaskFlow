@@ -46,8 +46,69 @@ const findTaskById = async (taskId) => {
     const result = await db.query(query, [taskId]);
     return result.rows[0];
 }
-const findTasksByProjectId = async (projectId) => {
-    const query = `
+const findTasksByProjectId = async (projectId, options = {}) => {
+    const {
+        status,
+        priority,
+        assigneeId,
+        search,
+        sortBy = 'created_at',
+        sortOrder = 'desc',
+        limit = 10,
+        offset = 0,
+    } = options;
+
+    const allowedSortFields = {
+        created_at: 't.created_at',
+        due_date: 't.due_date',
+        priority: 't.priority',
+        title: 't.title',
+        status: 't.status',
+    };
+
+    const sortColumn = allowedSortFields[sortBy] || 't.created_at';
+    const direction = sortOrder.toLowerCase() === 'asc' ? 'ASC' : 'DESC';
+
+    const conditions = ['t.project_id = $1'];
+    const values = [projectId];
+    let paramIndex = 2;
+
+    if (status) {
+        conditions.push(`t.status = $${paramIndex}`);
+        values.push(status);
+        paramIndex++;
+    }
+
+    if (priority) {
+        conditions.push(`t.priority = $${paramIndex}`);
+        values.push(priority);
+        paramIndex++;
+    }
+
+    if (assigneeId) {
+        conditions.push(`t.assignee_id = $${paramIndex}`);
+        values.push(assigneeId);
+        paramIndex++;
+    }
+
+    if (search) {
+        conditions.push(`(t.title ILIKE $${paramIndex} OR t.description ILIKE $${paramIndex})`);
+        values.push(`%${search}%`);
+        paramIndex++;
+    }
+
+    const whereClause = conditions.join(' AND ');
+
+    const countQuery = `
+        SELECT COUNT(t.id) AS "total"
+        FROM tasks t
+        WHERE ${whereClause};
+    `;
+    const countResult = await db.query(countQuery, values);
+    const totalItems = parseInt(countResult.rows[0].total, 10);
+
+    const dataValues = [...values, limit, offset];
+    const dataQuery = `
         SELECT 
             t.id,
             t.project_id AS "projectId",
@@ -65,11 +126,13 @@ const findTasksByProjectId = async (projectId) => {
         FROM tasks t
         JOIN users u_creator ON t.creator_id = u_creator.id
         LEFT JOIN users u_assignee ON t.assignee_id = u_assignee.id
-        WHERE t.project_id = $1
-        ORDER BY t.created_at DESC;
+        WHERE ${whereClause}
+        ORDER BY ${sortColumn} ${direction}
+        LIMIT $${paramIndex} OFFSET $${paramIndex + 1};
     `;
-    const { rows } = await db.query(query, [projectId]);
-    return rows;
+    const { rows } = await db.query(dataQuery, dataValues);
+
+    return { tasks: rows, totalItems };
 };
 const updateTask = async (taskId, updateData) => {
     const fieldMapping = {
@@ -122,7 +185,7 @@ const deleteTask = async (taskId) => {
     return rows[0] || null;
 };
 module.exports = {
-    creaateTask,
+    createTask,
     findTaskById,
     findTasksByProjectId,
     updateTask,
