@@ -8,7 +8,7 @@ const {
     deleteProjectById,
 } = require('./projects.service.js');
 const create = asyncHandler(async (req, res) => {
-    const { name, description } = req.bodyl
+    const { name, description } = req.body;
     const project = await createNewProject({
         name, description, userId: req.user.id
     });
