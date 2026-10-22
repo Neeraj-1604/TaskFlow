@@ -12,6 +12,7 @@ const createTask = async ({
             description,
             status,
             priority,
+            
             due_date AS "dueDate",
             creator_id AS "creatorId",
             assignee_id AS "assigneeId",
