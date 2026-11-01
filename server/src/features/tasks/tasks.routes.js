@@ -14,6 +14,7 @@ const {
     taskParamsSchema,
     taskQuerySchema,
 } = require('./tasks.validator.js');
+const commentsRouter = require('../comments/comments.routes.js');
 
 // mergeParams: true allows this router to access :projectId defined in parent router
 const router = express.Router({ mergeParams: true });
@@ -53,5 +54,8 @@ router.delete(
     validate(taskParamsSchema, 'params'),
     deleteTask
 );
+
+// Mount nested comments router
+router.use('/:taskId/comments', commentsRouter);
 
 module.exports = router;
