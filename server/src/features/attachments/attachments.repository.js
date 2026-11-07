@@ -1,8 +1,4 @@
 const db = require('../../config/db.js');
-
-/**
- * Insert attachment metadata into the database and return with uploader details.
- */
 const createAttachment = async ({
     taskId,
     uploaderId,
@@ -41,10 +37,6 @@ const createAttachment = async ({
     ]);
     return rows[0];
 };
-
-/**
- * Fetch all attachments for a specific task with uploader details in a single query (No N+1).
- */
 const findAttachmentsByTaskId = async (taskId) => {
     const query = `
         SELECT 
@@ -66,10 +58,6 @@ const findAttachmentsByTaskId = async (taskId) => {
     const { rows } = await db.query(query, [taskId]);
     return rows;
 };
-
-/**
- * Fetch a single attachment by ID.
- */
 const findAttachmentById = async (attachmentId) => {
     const query = `
         SELECT 
@@ -90,10 +78,6 @@ const findAttachmentById = async (attachmentId) => {
     const { rows } = await db.query(query, [attachmentId]);
     return rows[0] || null;
 };
-
-/**
- * Delete an attachment by ID.
- */
 const deleteAttachment = async (attachmentId) => {
     const query = `
         DELETE FROM attachments
