@@ -32,8 +32,8 @@ const updateMemberRole = async (projectId, userId, newRole) => {
     const { rows } = await db.query(query, [newRole, projectId, userId]);
     return rows[0] || null;
 };
-const removeMemberFromProject = async (project_id, user_id) => {
-    const query = `DELECT FROM project_members
+const removeMemberFromProject = async (projectId, userId) => {
+    const query = `DELETE FROM project_members
     WHERE project_id=$1 AND user_id=$2
     RETURNING id`;
     const { rows } = await db.query(query, [projectId, userId]);

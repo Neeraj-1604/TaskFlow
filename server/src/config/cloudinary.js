@@ -1,12 +1,14 @@
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
-require('dotenv').config();
+const env = require('./env.js');
+
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: env.cloudinary.cloudName,
+    api_key: env.cloudinary.apiKey,
+    api_secret: env.cloudinary.apiSecret,
     secure: true,
 });
+
 const uploadOnCloudinary = async (localFilePath, folder = 'taskflow_attachments') => {
     try {
         if (!localFilePath) return null;
@@ -26,6 +28,7 @@ const uploadOnCloudinary = async (localFilePath, folder = 'taskflow_attachments'
         throw error;
     }
 };
+
 const deleteFromCloudinary = async (publicId, resourceType = 'image') => {
     try {
         if (!publicId) return null;

@@ -7,7 +7,7 @@ const authorize = (...allowedRoles) => {
         try {
             const projectId = req.params.projectId || req.params.id;
             if (!projectId) {
-                return next(new AuthorizationError('Project Id is required for authorizaation'));
+                return next(new AuthorizationError('Project ID is required for authorization'));
             }
             const member = await findProjectMember(projectId, req.user.id);
             if (!member) {

@@ -1,19 +1,25 @@
 const jwt = require('jsonwebtoken');
+const env = require('../config/env.js');
+
 const generateAccessToken = (payload) => {
-    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_EXPIRES_IN });
+    return jwt.sign(payload, env.jwt.accessSecret, { expiresIn: env.jwt.accessExpiresIn });
 };
+
 const generateRefreshToken = (payload) => {
-    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_EXPIRES_IN });
+    return jwt.sign(payload, env.jwt.refreshSecret, { expiresIn: env.jwt.refreshExpiresIn });
 };
+
 const verifyAccessToken = (token) => {
-    return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    return jwt.verify(token, env.jwt.accessSecret);
 };
+
 const verifyRefreshToken = (token) => {
-    return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+    return jwt.verify(token, env.jwt.refreshSecret);
 };
+
 module.exports = {
     generateAccessToken,
     generateRefreshToken,
     verifyAccessToken,
-    verifyRefreshToken
+    verifyRefreshToken,
 };

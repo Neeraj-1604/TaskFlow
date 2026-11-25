@@ -20,6 +20,10 @@ const attachmentsRouter = require('../attachments/attachments.routes.js');
 // mergeParams: true allows this router to access :projectId defined in parent router
 const router = express.Router({ mergeParams: true });
 
+// Validate the project/task ids before authorize() queries the database.
+// Otherwise a malformed UUID reaches PostgreSQL and surfaces as a 500.
+router.use(validate(taskParamsSchema, 'params'));
+
 // All routes under /:projectId/tasks require the user to be at least a member of the project
 router.use(authorize('owner', 'admin', 'member'));
 

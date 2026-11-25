@@ -51,7 +51,7 @@ const refreshAccessToken = async (refreshToken) => {
     }
     const user = await findUserById(decoded.id);
     if (!user) {
-        throw new AuthenticationError('User belonging to this token no lpnger exists');
+        throw new AuthenticationError('User belonging to this token no longer exists');
     }
     const newAccessToken = generateAccessToken({ id: user.id, email: user.email });
     return { accessToken: newAccessToken };

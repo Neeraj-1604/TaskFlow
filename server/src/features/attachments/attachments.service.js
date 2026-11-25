@@ -5,7 +5,7 @@ const {
     deleteAttachment,
 } = require('./attachments.repository.js');
 const { findTaskById } = require('../tasks/tasks.repository.js');
-const { findProjectMember } = require('../members/members.repository.js');
+const { findProjectMember } = require('../projects/projects.repository.js');
 const { uploadOnCloudinary, deleteFromCloudinary } = require('../../config/cloudinary.js');
 const NotFoundError = require('../../errors/NotFoundError.js');
 const AuthorizationError = require('../../errors/AuthorizationError.js');
